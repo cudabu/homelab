@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+
+# shellcheck disable=SC2155
+export PROJECT_DIR=$(git rev-parse --show-toplevel)
+
+# shellcheck disable=SC2155
+export SOPS_AGE_KEY_FILE=~/.config/sops/age/keys.txt
+
+# shellcheck disable=SC1091
+source "${PROJECT_DIR}/.config.env"
+
+show_help() {
+cat << EOF
+Usage: $(basename "$0") <options>
+    -h, --help                      Display help
+    --verify                        Verify .config.env settings
+EOF
+}
+
+main() {
+    local verify=
+    parse_command_line "$@"
+}
+
+parse_command_line() {
+    while :; do
+        case "${1:-}" in
+            -h|--help)
+                show_help
+                exit
+                ;;
+            --verify)
+                verify=1
+                ;;
+            *)
+                break
+                ;;
+        esac
+
+        shift
+    done
+    if [[ -z "$verify" ]]; then
+        verify=0
+    fi
+
+
+_log() {
+    local type="${1}"
+    local msg="${2}"
+    printf 'timestamp="%s" type="%s" message="%s"\n' "$(date)" "${type}" "${msg}"
+}
+
+main "$@"
