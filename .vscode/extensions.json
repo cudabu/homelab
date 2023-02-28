@@ -10,5 +10,6 @@
         "EditorConfig.editorconfig",
         "HashiCorp.terraform",
         "PKief.material-icon-theme",
+        "bbenoist.Nix",
     ]
 }
