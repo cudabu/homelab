@@ -13,7 +13,7 @@ env:
   SOPS_AGE_KEY_FILE: ~/.config/sops/age/keys.txt
 
 includes:
-  # ansible: .taskfiles/AnsibleTasks.yml
+  ansible: .taskfiles/AnsibleTasks.yml
   # cluster: .taskfiles/ClusterTasks.yml
   precommit: .taskfiles/PrecommitTasks.yml
   # terraform: .taskfiles/TerraformTasks.yml
