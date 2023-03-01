@@ -53,6 +53,19 @@ _log() {
     printf 'timestamp="%s" type="%s" message="%s"\n' "$(date)" "${type}" "${msg}"
 }
 
+setup_github_webhook() {
+    _has_envar "BOOTSTRAP_FLUX_GITHUB_WEBHOOK_SECRET"
+    WEBHOOK_SECRET="${BOOTSTRAP_FLUX_GITHUB_WEBHOOK_SECRET}"
+    if [[ "${WEBHOOK_SECRET}" == "generated" ]]; then
+        WEBHOOK_SECRET="$(openssl rand -base64 30)"
+    fi
+    export BOOTSTRAP_FLUX_GITHUB_WEBHOOK_SECRET="${WEBHOOK_SECRET}"
+    _log "INFO(${FUNCNAME[0]})" "Using GitHub Token '${WEBHOOK_SECRET}' for Flux"
+    envsubst < "${PROJECT_DIR}/tmpl/kubernetes/github-webhook-token-secret.sops.yaml" \
+        > "${PROJECT_DIR}/kubernetes/apps/flux-system/addons/webhooks/github/secret.sops.yaml"
+    sops --encrypt --in-place "${PROJECT_DIR}/kubernetes/apps/flux-system/addons/webhooks/github/secret.sops.yaml"
+}
+
 generate_ansible_hosts() {
     local worker_node_count=
     default_control_node_prefix=${BOOTSTRAP_ANSIBLE_DEFAULT_CONTROL_NODE_HOSTNAME_PREFIX:-k8s-}
