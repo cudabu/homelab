@@ -19,60 +19,42 @@ includes:
   # terraform: .taskfiles/TerraformTasks.yml
 
 tasks:
-
   init:
-    desc: Initialize worstation using Nix
+    desc: Initialize workstation dependencies with Brew
     cmds:
-      - docker run \
-        --rm \
-        --interactive \
-        --tty \
-        --network host \
-        --env "KUBECONFIG=${KUBECONFIG}" \
-        --volume "/var/run/docker.sock:/var/run/docker.sock" \
-        --volume $(pwd):$(pwd) \
-        --volume ${HOME}/.ssh:/root/.ssh \
-        --volume ${HOME}/.terraform.d:/root/.terraform.d \
-        --volume homelab-tools-cache:/root/.cache \
-        --volume homelab-tools-nix:/nix \
-        --workdir $(pwd) \
-        nixos/nix nix-shell
-  # init:
-  #   desc: Initialize workstation dependencies with Brew
-  #   cmds:
-  #     - brew install {{.DEPS}} {{.CLI_ARGS}}
-  #   preconditions:
-  #     - sh: command -v brew
-  #       msg: |
-  #         Homebrew is not installed. Using MacOS, Linux or WSL?
-  #         Head over to https://brew.sh to get up and running.
-  #   vars:
-  #     DEPS: >-
-  #       age
-  #       ansible
-  #       direnv
-  #       fluxcd/tap/flux
-  #       go-task/tap/go-task
-  #       helm
-  #       ipcalc
-  #       jq
-  #       kubernetes-cli
-  #       kustomize
-  #       pre-commit
-  #       prettier
-  #       sops
-  #       stern
-  #       terraform
-  #       tflint
-  #       weaveworks/tap/gitops
-  #       yamllint
-  #       yq
-  # verify:
-  #   desc: Verify env settings
-  #   cmds:
-  #     - ./configure --verify
+      - brew install {{.DEPS}} {{.CLI_ARGS}}
+    preconditions:
+      - sh: command -v brew
+        msg: |
+          Homebrew is not installed. Using MacOS, Linux or WSL?
+          Head over to https://brew.sh to get up and running.
+    vars:
+      DEPS: >-
+        age
+        ansible
+        direnv
+        fluxcd/tap/flux
+        go-task/tap/go-task
+        helm
+        ipcalc
+        jq
+        kubernetes-cli
+        kustomize
+        pre-commit
+        prettier
+        sops
+        stern
+        terraform
+        tflint
+        weaveworks/tap/gitops
+        yamllint
+        yq
+  verify:
+    desc: Verify env settings
+    cmds:
+      - ./configure --verify
 
-  # configure:
-  #   desc: Configure repository from env settings
-  #   cmds:
-  #     - ./configure
+  configure:
+    desc: Configure repository from env settings
+    cmds:
+      - ./configure

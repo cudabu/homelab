@@ -11,31 +11,26 @@ let
 in
 pkgs.mkShell {
   buildInputs = with pkgs; [
+    age
     ansible
     ansible-lint
-    bmake
-    diffutils
-    docker
-    docker-compose_1 # TODO upgrade to version 2
-    git
-    go
-    gotestsum
-    iproute2
-    jq
-    k9s
-    kube3d
-    kubectl
+    direnv
+    fluxcd
+    go-task
     kubernetes-helm
+    ipcalc
+    jq
+    haskellPackages.kubernetes-client
     kustomize
-    libisoburn
-    neovim
-    openssh
-    p7zip
     pre-commit
-    shellcheck
+    nodePackages_latest.prettier
+    sops
+    stern
     terraform
+    tflint
+    gitops
     yamllint
+    yq
 
-    python-packages
   ];
 }
